@@ -6,6 +6,16 @@ trait Poop {
     }
 }
 
+macro_rules! impl_poop {
+    ($Type:ty) => {
+        impl Poop for $Type {
+            fn name(&self) -> &String {
+                &self.name
+            }
+        }
+    }
+}
+
 struct Dog {
     pub name: String,
 }
@@ -16,11 +26,7 @@ impl Dog {
     }
 }
 
-impl Poop for Dog {
-    fn name(&self) -> &String {
-        &self.name
-    }
-}
+impl_poop!(Dog);
 
 struct Cat {
     pub name: String,
@@ -32,11 +38,7 @@ impl Cat {
     }
 }
 
-impl Poop for Cat {
-    fn name(&self) -> &String {
-        &self.name
-    }
-}
+impl_poop!(Cat);
 
 fn main() {
     {
