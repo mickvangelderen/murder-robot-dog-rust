@@ -1,3 +1,11 @@
+trait Poop {
+    fn name(&self) -> &String;
+
+    fn poop(&self) -> String {
+        format!("{} pooped.", self.name())
+    }
+}
+
 struct Dog {
     pub name: String,
 }
@@ -6,9 +14,11 @@ impl Dog {
     fn bark(&self) -> String {
         format!("{}: Woof!", self.name)
     }
+}
 
-    fn poop(&self) -> String {
-        format!("{} pooped.", self.name)
+impl Poop for Dog {
+    fn name(&self) -> &String {
+        &self.name
     }
 }
 
@@ -20,9 +30,11 @@ impl Cat {
     fn meow(&self) -> String {
         format!("{}: Meow!", self.name)
     }
+}
 
-    fn poop(&self) -> String {
-        format!("{} pooped.", self.name)
+impl Poop for Cat {
+    fn name(&self) -> &String {
+        &self.name
     }
 }
 
