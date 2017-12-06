@@ -40,6 +40,48 @@ impl Cat {
 
 impl_poop!(Cat);
 
+trait Drive {
+    fn name(&self) -> &String;
+
+    fn drive(&self) -> String {
+        format!("{} is moving.", self.name())
+    }
+}
+
+macro_rules! impl_drive {
+    ($Type:ty) => {
+        impl Drive for $Type {
+            fn name(&self) -> &String {
+                &self.name
+            }
+        }
+    }
+}
+
+struct CleaningRobot {
+    pub name: String,
+}
+
+impl CleaningRobot {
+    fn clean(&self) -> String {
+        format!("{} is cleaning.", self.name)
+    }
+}
+
+impl_drive!(CleaningRobot);
+
+struct KillingRobot {
+    pub name: String,
+}
+
+impl KillingRobot {
+    fn kill(&self) -> String {
+        format!("{} is on a rampage!", self.name)
+    }
+}
+
+impl_drive!(KillingRobot);
+
 fn main() {
     {
         let mick = Dog { name: String::from("Mick") };
@@ -51,5 +93,17 @@ fn main() {
         let oliv = Cat { name: String::from("Oliver") };
         println!("{}", oliv.meow());
         println!("{}", oliv.poop());
+    }
+
+    {
+        let r2d2 = CleaningRobot { name: String::from("R2D2") };
+        println!("{}", r2d2.clean());
+        println!("{}", r2d2.drive());
+    }
+
+    {
+        let hk47 = KillingRobot { name: String::from("HK47") };
+        println!("{}", hk47.kill());
+        println!("{}", hk47.drive());
     }
 }
