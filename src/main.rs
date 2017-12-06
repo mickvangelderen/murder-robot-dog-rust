@@ -16,16 +16,29 @@ macro_rules! impl_poop {
     }
 }
 
+trait Bark {
+    fn name(&self) -> &String;
+
+    fn bark(&self) -> String {
+        format!("{}: Woof!", self.name())
+    }
+}
+
+macro_rules! impl_bark {
+    ($Type:ty) => {
+        impl Bark for $Type {
+            fn name(&self) -> &String {
+                &self.name
+            }
+        }
+    }
+}
+
 struct Dog {
     pub name: String,
 }
 
-impl Dog {
-    fn bark(&self) -> String {
-        format!("{}: Woof!", self.name)
-    }
-}
-
+impl_bark!(Dog);
 impl_poop!(Dog);
 
 struct Cat {
@@ -70,17 +83,40 @@ impl CleaningRobot {
 
 impl_drive!(CleaningRobot);
 
+trait Killer {
+    fn name(&self) -> &String;
+
+    fn kill(&self) -> String {
+        format!("{} is on a rampage!", self.name())
+    }
+}
+
+macro_rules! impl_killer {
+    ($Type:ty) => {
+        impl Killer for $Type {
+            fn name(&self) -> &String {
+                &self.name
+            }
+        }
+    }
+}
+
 struct KillingRobot {
     pub name: String,
 }
 
-impl KillingRobot {
-    fn kill(&self) -> String {
-        format!("{} is on a rampage!", self.name)
-    }
+impl_killer!(KillingRobot);
+impl_drive!(KillingRobot);
+
+// Here it comes...
+
+struct MurderRobotDog {
+    pub name: String,
 }
 
-impl_drive!(KillingRobot);
+impl_bark!(MurderRobotDog);
+impl_drive!(MurderRobotDog);
+impl_killer!(MurderRobotDog);
 
 fn main() {
     {
@@ -105,5 +141,12 @@ fn main() {
         let hk47 = KillingRobot { name: String::from("HK47") };
         println!("{}", hk47.kill());
         println!("{}", hk47.drive());
+    }
+
+    {
+        let mpjme = MurderRobotDog { name: String::from("Matthias") };
+        println!("{}", mpjme.bark());
+        println!("{}", mpjme.drive());
+        println!("{}", mpjme.kill());
     }
 }
